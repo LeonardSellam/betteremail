@@ -11,7 +11,7 @@ This API is a FastAPI python API. After launching your app locally you can acces
 
 FastAPI is a very lightweight framework to manage a python API. It comes with a lot of coroutines features (`async` mode) that we could capitalized on to better manage `I/O` (with the Microsoft/Gmail API) and `CPU` use at some point with our ML models.
 
-### Architectures
+## Development
 
 The `main.py` file is the entrypoint and contains the API endpoints. 
 All the business logic is located in the `betteremail` folder with mainly: 
@@ -24,21 +24,21 @@ All the business logic is located in the `betteremail` folder with mainly:
 
 We use `poetry` as a package managers (pretty modern tool wih more features that pip to easily manage different environments). 
 
-#### Install poetry
+### Install poetry
 
 ```
 #on Mac
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-#### Install dependencies
+### Install dependencies
 
 At the root
 ```
 poetry install
 ```
 
-#### Run locally
+### Run locally
 
 You will need environment variables. The project comes with default and publics data to work locally. Currently, you will need to ask for the `MICROSOFT_CLIENT_SECRET` variable.
 
@@ -49,12 +49,21 @@ uvicorn main:app --reload
 
 /!\ To test the main endpoints you'll have to provide the idToken. This token is obtained when the user SignIn with its provider. It's recommended to use a simple SPA or Postman workflow to get the ID Token.
 
-#### Launch the tests
+### Launch the tests
 
 ```
 poetry run pytest
 ```
 
+## Deploy
+
+The platform used for deployment is heroku. As heroku doesn't handle `poetry` well, one has to make sure the `requirements.txt` file is up to date by running the following command before a new deployment: 
+
+```
+poetry export -f requirements.txt --output requirements.txt
+```
+
+This will allow heroku to use the `pip` package manager for the deployment.
 
 ## Workflow
 
