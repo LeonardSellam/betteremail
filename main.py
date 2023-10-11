@@ -6,8 +6,18 @@ from azure.core.exceptions import ClientAuthenticationError
 from betteremail.utils import generate_state, check_id_token_and_return_id_provider, select_oauth_provider, str_to_timestamp
 import betteremail.graph as graph
 
+tags_metadata = [
+    {
+        "name": "public",
+        "description": "Endpoints to authenticate users.",
+    },
+    {
+        "name": "private",
+        "description": "Manage emails. Endpoints that allow clients to get information and notification about emails.",
+    },
+]
 
-app = FastAPI()
+app = FastAPI(title="Better Email")
 
 origins = [
     "http://localhost:3000",
@@ -24,14 +34,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
+@app.get("/", tags=["public"])
+async def probe():
+    """
+    Liveness probe
+    """
     return {"message": "Hello World"}
 
-@app.get('/emails')
+@app.get('/emails', tags=["private"])
 async def emails(since: str, idToken: str):
     """
-     This API endpoint returns a Bool if the user whose idToken matches has received an email since the timestamps provided
+     This API endpoint returns True if the user has received an email after the timestamps provided in params, False otherwise.
     """
     provider = check_id_token_and_return_id_provider(idToken) #TODO : raise error if idToken not correct
     since = str_to_timestamp(since) #TODO: Handle ERROR    
@@ -47,10 +60,10 @@ async def emails(since: str, idToken: str):
     return result
 
 # Route to initiate Microsoft OAuth 2.0 authentication
-@app.get("/connect/email")
+@app.get("/connect/email", tags=["public"])
 def connect(email: str, state: str = Depends(generate_state)):
     """
-     This API endpoint returns a Bool if the user whose idToken matches has received an email since the timestamps provided
+     This endpoint redirects the client to the matching oauth2 flow.
     """
     # Store the state value in the session for later verification
     url = select_oauth_provider(email, state)

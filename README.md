@@ -69,7 +69,16 @@ This will allow heroku to use the `pip` package manager for the deployment.
 
 - A user who first tries to interact to our API will be asked to provide his email;
 - Based on the email, we will require the user to complete an oAuth2 workflow, and consent to our requirements (access to their inbox on their behalf);
-- Then, the client can start interacting with the API which will act on behalf of our users to fetch data from their mail boxes directly;
+- At this point the client should have i) an access token ii) an id token;
+- The client can start interacting with the API which will act on behalf of our users to fetch data from their mail boxes directly;
+
+For example if the client wants to know if there is a new email waiting for the user in the inbox: 
+
+```
+{root_url}/emails?since=2023-10-11T13:20:59Z&idToken={IdToken}
+```
+
+TODO: For now the access token isn't used but should be provided (as an Authorisation header) and verify for each private endpoints.
 
 ## Authorisations between Client & our API
 
