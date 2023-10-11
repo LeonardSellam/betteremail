@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "betteremail"
+version = "0.1.0"
+description = ""
+authors = ["Leonard Sellam <leonardsellam@hey.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.2"
+uvicorn = "^0.23.2"
+azure-identity = "^1.14.1"
+msgraph-core = "^0.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
