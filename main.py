@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from azure.core.exceptions import ClientAuthenticationError
 import requests
-import graph
+import betteremail.graph as graph
 
 
 app = FastAPI()
