@@ -1,9 +1,9 @@
 
+from datetime import datetime
 from azure.identity import OnBehalfOfCredential
 from msgraph.core import GraphClient
 from .utils import is_older, str_to_timestamp
 from .common import MICROSOFT_CLIENT_ID, MICROSOFT_CLIENT_SECRET, MICROSOFT_API_SCOPES
-
 
 def get_obo_credentials(idToken):
 
@@ -39,9 +39,10 @@ def has_received_an_email_since(datetime, idToken):
     response.raise_for_status() 
 
 def get_last_email_timestamp(inbox):
-    emails = inbox['value']
+    emails = inbox.get('value', [])
+
 
     if not emails:
-        return False
+        return datetime(1000, 1, 1)
             
     return str_to_timestamp(list(emails)[0]["receivedDateTime"])

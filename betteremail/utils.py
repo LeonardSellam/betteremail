@@ -1,5 +1,5 @@
 import uuid
-import datetime
+from datetime import datetime
 from .common import MICROSOFT_AUTH_URL, GMAIL_AUTH_URL, MICROSOFT_CLIENT_ID, REDIRECT_URI, MICROSOFT_CLIENT_SCOPES, GMAIL_CLIENT_ID, DATETIME_FORMAT
 
 
@@ -9,7 +9,7 @@ def select_oauth_provider(email, state):
     if "@microsoft.com" in email:
         return microsoft_auth_flow_url(state)
     else:
-        "error"
+        return "error"
 
 
 def microsoft_auth_flow_url(state):

@@ -23,8 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Function to generate a unique state value for CSRF protection
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
