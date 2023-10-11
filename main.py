@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from azure.core.exceptions import ClientAuthenticationError
 
-from betteremail.utils import generate_state
+from betteremail.utils import generate_state, check_id_token_and_return_id_provider
 import betteremail.graph as graph
 
 
@@ -30,11 +30,15 @@ async def root():
 
 @app.get('/emails')
 async def emails(since: str, idToken: str):
-    since = graph.str_to_timestamp(since) #TODO: Handle ERROR
-    try:
-        result = graph.has_received_an_email_since(since, idToken)
-    except ClientAuthenticationError as e:
-        raise HTTPException(status_code=404, detail=e.message)
+    provider = check_id_token_and_return_id_provider(idToken) #TODO : raise error if idToken not correct
+    since = graph.str_to_timestamp(since) #TODO: Handle ERROR    
+    if provider == "graph":
+        try:
+            result = graph.has_received_an_email_since(since, idToken)
+        except ClientAuthenticationError as e:
+            raise HTTPException(status_code=404, detail=e.message)
+    else:
+        result = "Gmail not available"
 
     return result
 

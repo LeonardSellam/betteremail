@@ -1,15 +1,18 @@
 import uuid
 from datetime import datetime
+import re
 from .common import MICROSOFT_AUTH_URL, GMAIL_AUTH_URL, MICROSOFT_CLIENT_ID, REDIRECT_URI, MICROSOFT_CLIENT_SCOPES, GMAIL_CLIENT_ID, DATETIME_FORMAT
 
+EMAIL_REGEX =  r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 def select_oauth_provider(email, state):
-    if "@gmail.com" in email:
-        return gmail_auth_flow_url(state)
-    if "@microsoft.com" in email:
-        return microsoft_auth_flow_url(state)
-    else:
-        return "error"
+    if(re.fullmatch(EMAIL_REGEX, email)):
+        if "@gmail.com" in email:
+            return gmail_auth_flow_url(state)
+        if "@microsoft.com" in email:
+            return microsoft_auth_flow_url(state)
+
+    return "error"
 
 
 def microsoft_auth_flow_url(state):
@@ -26,3 +29,6 @@ def str_to_timestamp(st):
 
 def generate_state():
     return str(uuid.uuid4())
+
+def check_id_token_and_return_id_provider(idToken):
+    return "graph"
