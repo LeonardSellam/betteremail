@@ -9,10 +9,10 @@ import betteremail.graph as graph
 
 app = FastAPI()
 
-
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
+    "https://sheltered-fortress-14848-ca530ca38502.herokuapp.com/"
 ]
 
 #TODO: CORS allowed for local development. Origins should change
