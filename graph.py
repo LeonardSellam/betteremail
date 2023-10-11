@@ -1,7 +1,9 @@
 import os
+import uuid
+from datetime import datetime
+
 from azure.identity import OnBehalfOfCredential
 from msgraph.core import GraphClient
-from datetime import datetime
 
 
 MICROSOFT_AUTH_URL = os.getenv("MICROSOFT_AUTH_URL", "https://login.microsoftonline.com/consumers/oauth2/authorize")
@@ -11,7 +13,6 @@ MICROSOFT_CLIENT_ID = os.getenv("MICROSOFT_CLIENT_ID", "be73bf81-df80-40e2-baf7-
 MICROSOFT_CLIENT_SECRET = os.getenv("MICROSOFT_CLIENT_SECRET", "")
 
 REDIRECT_URI = os.getenv("REDIRECT_URI", "http://localhost:8000/callback")
-
 
 GMAIL_CLIENT_ID = os.getenv("GMAIL_CLIENT_ID", "")
 GMAIL_CLIENT_SECRET = os.getenv("GMAIL_CLIENT_SECRET", "")
@@ -37,21 +38,12 @@ def user_graph_client(idToken):
     user_client = GraphClient(credential=credentials, scopes=MICROSOFT_API_SCOPES.split(' '))
     return user_client
 
-def get_user():
-    endpoint = '/me'
-    # Only request specific properties
-    select = 'displayName,mail,userPrincipalName'
-    request_url = f'{endpoint}?$select={select}'
-
-    user_response = user_graph_client().get(request_url)
-    return user_response.json()
-
 def has_received_an_email_since(datetime, idToken):
     endpoint = '/me/mailFolders/inbox/messages'
-    # Only request specific properties
+
     select = 'from,isRead,receivedDateTime,subject'
-    # Get at most 25 results
-    top = 2
+
+    top = 1
     # Sort by received time, newest first
     order_by = 'receivedDateTime DESC'
     request_url = f'{endpoint}?$select={select}&$top={top}&$orderBy={order_by}'
@@ -78,3 +70,20 @@ def is_older(tmstp1, tmstp2):
 def str_to_timestamp(st):
     return datetime.strptime(st, date_format)
 
+def generate_state():
+    return str(uuid.uuid4())
+
+def microsoft_auth_flow_url(state):
+    return f"{MICROSOFT_AUTH_URL}?client_id={MICROSOFT_CLIENT_ID}&redirect_uri={REDIRECT_URI}&state={state}&response_type=code&scope={MICROSOFT_CLIENT_SCOPES}&response_mode=query"
+
+def gmail_auth_flow_url(state):
+    return f"{GMAIL_AUTH_URL}?client_id={GMAIL_CLIENT_ID}&redirect_uri={REDIRECT_URI}&state={state}&response_type=code&scope=email profile"
+
+
+def oauth_selection(email, state):
+    if "@gmail.com" in email:
+        return gmail_auth_flow_url(state)
+    if "@microsoft.com" in email:
+        return microsoft_auth_flow_url(state)
+    else:
+        "error"
