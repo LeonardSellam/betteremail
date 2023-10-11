@@ -47,12 +47,24 @@ At the root
 uvicorn main:app --reload
 ```
 
+/!\ To test the main endpoints you'll have to provide the idToken. This token is obtained when the user SignIn with its provider. It's recommended to use a simple SPA or Postman workflow to get the ID Token.
+
+#### Launch the tests
+
+```
+poetry run pytest
+```
+
 
 ## Workflow
 
 - A user who first tries to interact to our API will be asked to provide his email;
 - Based on the email, we will require the user to complete an oAuth2 workflow, and consent to our requirements (access to their inbox on their behalf);
 - Then, the client can start interacting with the API which will act on behalf of our users to fetch data from their mail boxes directly;
+
+## Authorisations between Client & our API
+
+For now we only check the IdToken. We also should verify the access token the user got in the same oauth2 workflow.
 
 ## Identity providers
 
