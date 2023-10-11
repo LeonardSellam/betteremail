@@ -2,7 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from azure.core.exceptions import ClientAuthenticationError
-import requests
+
+from betteremail.utils import generate_state
 import betteremail.graph as graph
 
 
@@ -40,7 +41,7 @@ async def emails(since: str, idToken: str):
 
 # Route to initiate Microsoft OAuth 2.0 authentication
 @app.get("/connect/email")
-def connect(email: str, state: str = Depends(graph.generate_state)):
+def connect(email: str, state: str = Depends(generate_state)):
     # Store the state value in the session for later verification
     url = graph.oauth_selection(email, state)
     return RedirectResponse(url)
