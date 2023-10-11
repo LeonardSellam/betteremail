@@ -9,12 +9,13 @@ import betteremail.graph as graph
 
 app = FastAPI()
 
+
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
 ]
 
-#TODO : CORS allowed for local development. Origins should change
+#TODO: CORS allowed for local development. Origins should change
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
