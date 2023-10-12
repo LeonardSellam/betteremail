@@ -4,12 +4,14 @@ import re
 from .common import MICROSOFT_AUTH_URL, GMAIL_AUTH_URL, MICROSOFT_CLIENT_ID, REDIRECT_URI, MICROSOFT_CLIENT_SCOPES, GMAIL_CLIENT_ID, DATETIME_FORMAT
 
 EMAIL_REGEX =  r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+GMAIL_SUFFIXES = "@gmail.com"
+MICROSOFT_SUFFIXES = "@microsoft.com @outlook.com"
 
 def select_oauth_provider(email, state):
     if(re.fullmatch(EMAIL_REGEX, email)):
-        if "@gmail.com" in email:
+        if any(suffix in email for suffix in GMAIL_SUFFIXES.split(" ")):
             return gmail_auth_flow_url(state)
-        if "@microsoft.com" in email:
+        if any(suffix in email for suffix in MICROSOFT_SUFFIXES.split(" ")):
             return microsoft_auth_flow_url(state)
 
     return "error"

@@ -2,8 +2,11 @@ from betteremail.utils import select_oauth_provider, is_older, generate_state, s
 from datetime import datetime, timezone
 
 def test_select_oauth_provider_when_microsoft():
-    result = select_oauth_provider("leo@microsoft.com", "123")
-    assert result == "https://login.microsoftonline.com/consumers/oauth2/authorize?client_id=be73bf81-df80-40e2-baf7-9f06cec51885&redirect_uri=http://localhost:8000/callback&state=123&response_type=code&scope=User.Read Mail.Read email offline_access openid profile&response_mode=query"
+    result_microsoft = select_oauth_provider("leo@microsoft.com", "123")
+    assert result_microsoft == "https://login.live.com/oauth20_authorize.srf?client_id=be73bf81-df80-40e2-baf7-9f06cec51885&redirect_uri=http://localhost:8000/callback&state=123&response_type=code&scope=https://graph.microsoft.com/.default"
+
+    result_outlook = select_oauth_provider("leo@outlook.com", "789")
+    assert result_outlook == "https://login.live.com/oauth20_authorize.srf?client_id=be73bf81-df80-40e2-baf7-9f06cec51885&redirect_uri=http://localhost:8000/callback&state=789&response_type=code&scope=https://graph.microsoft.com/.default"
 
 def test_select_oauth_provider_when_gmail():
     result = select_oauth_provider("leo@gmail.com", "123")

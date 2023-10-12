@@ -11,7 +11,7 @@ This API is a FastAPI python API. After launching your app locally you can acces
 
 FastAPI is a very lightweight framework to manage a python API. It comes with a lot of coroutines features (`async` mode) that we could capitalized on to better manage `I/O` (with the Microsoft/Gmail API) and `CPU` use at some point with our ML models.
 
-## Development
+## Local development
 
 The `main.py` file is the entrypoint and contains the API endpoints. 
 All the business logic is located in the `betteremail` folder with mainly: 
@@ -55,7 +55,7 @@ uvicorn main:app --reload
 poetry run pytest
 ```
 
-## Deploy
+### Deploy
 
 The platform used for deployment is heroku. As heroku doesn't handle `poetry` well, one has to make sure the `requirements.txt` file is up to date by running the following command before a new deployment: 
 
