@@ -42,16 +42,16 @@ async def probe():
     return {"message": "Hello World"}
 
 @app.get('/emails', tags=["private"])
-async def emails(since: str, idToken: str):
+async def emails(since: str, token: str):
     """
      This API endpoint returns True if the user has received an email after the timestamps provided in params, False otherwise.
     """
-    provider = check_id_token_and_return_id_provider(idToken) #TODO : raise error if idToken not correct
+    provider = check_id_token_and_return_id_provider(token) #TODO : raise error if idToken not correct
     since = str_to_timestamp(since) #TODO: Handle ERROR    
     
     if provider == "graph":
         try:
-            result = graph.has_received_an_email_since(since, idToken)
+            result = graph.has_received_an_email_since(since, token)
         except ClientAuthenticationError as e:
             raise HTTPException(status_code=404, detail=e.message)
     else:

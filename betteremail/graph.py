@@ -15,12 +15,12 @@ def get_obo_credentials(idToken):
     )   
     return credential
 
-def user_graph_client(idToken):
-    credentials = get_obo_credentials(idToken)
+def user_graph_client(token):
+    credentials = get_obo_credentials(token)
     user_client = GraphClient(credential=credentials, scopes=MICROSOFT_API_SCOPES.split(' '))
     return user_client
 
-def has_received_an_email_since(datetime, idToken):
+def has_received_an_email_since(datetime, token):
     endpoint = '/me/mailFolders/inbox/messages'
 
     select = 'from,isRead,receivedDateTime,subject'
@@ -30,7 +30,7 @@ def has_received_an_email_since(datetime, idToken):
     order_by = 'receivedDateTime DESC'
     request_url = f'{endpoint}?$select={select}&$top={top}&$orderBy={order_by}'
 
-    response = user_graph_client(idToken).get(request_url)
+    response = user_graph_client(token).get(request_url)
 
     if response.status_code == 200:
         last_timestamps = get_last_email_timestamp(response.json())

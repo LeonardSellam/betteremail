@@ -47,7 +47,7 @@ At the root
 uvicorn main:app --reload
 ```
 
-/!\ To test the main endpoints you'll have to provide the idToken. This token is obtained when the user SignIn with its provider. It's recommended to use a simple SPA or Postman workflow to get the ID Token.
+/!\ To test the main endpoints you'll have to provide the Access Token. This token is obtained when the user SignIn with its provider. It's recommended to use a simple SPA or Postman workflow to get the Access Token.
 
 ### Launch the tests
 

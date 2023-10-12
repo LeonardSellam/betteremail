@@ -11,7 +11,7 @@ REDIRECT_URI = os.getenv("REDIRECT_URI", "http://localhost:8000/callback")
 GMAIL_CLIENT_ID = os.getenv("GMAIL_CLIENT_ID", "")
 GMAIL_CLIENT_SECRET = os.getenv("GMAIL_CLIENT_SECRET", "")
 
-MICROSOFT_CLIENT_SCOPES = os.getenv("MICROSOFT_CLIENT_SCOPES", "https://graph.microsoft.com/.default")
-MICROSOFT_API_SCOPES = os.getenv("MICROSOFT_API_SCOPES", "User.Read Mail.Read email")
+MICROSOFT_CLIENT_SCOPES = os.getenv("MICROSOFT_CLIENT_SCOPES", "api://be73bf81-df80-40e2-baf7-9f06cec51885/Emails.read")
+MICROSOFT_API_SCOPES = os.getenv("MICROSOFT_API_SCOPES", "https://graph.microsoft.com/.default")
 
 DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
